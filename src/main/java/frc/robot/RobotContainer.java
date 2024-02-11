@@ -30,6 +30,9 @@ import java.util.List;
 
 import frc.robot.commands.elevatorTest;
 
+//this is my comment that should be visible on github
+//hopefully visible
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -42,7 +45,8 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-    private boolean fieldRelative = true;
+  private boolean fieldRelative = true;
+
 
   //limit switches
     DigitalInput limitSwitch = new DigitalInput(0);
