@@ -28,9 +28,6 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-
-import frc.robot.Constants.OIConstants;
 import frc.robot.commands.elevatorTest;
 
 /*
@@ -117,25 +114,6 @@ public class RobotContainer {
             true
         ));
 
-   /*  new JoystickButton(m_driverController, OIConstants.kRightBumper)
-        .toggleOnTrue(new RunCommand(() -> {
-            SwerveModuleState[] state = {new SwerveModuleState(0,new Rotation2d(0)),
-                                        new SwerveModuleState(0,new Rotation2d(0)),
-                                        new SwerveModuleState(0,new Rotation2d(0)),
-                                        new SwerveModuleState(2,new Rotation2d(0))
-                                        };
-            m_robotDrive.setModuleStates(state);
-        }, m_robotDrive));
-
-        new JoystickButton(m_driverController, OIConstants.kLeftBumper)
-        .toggleOnTrue(new RunCommand(() -> {
-            SwerveModuleState[] state = {new SwerveModuleState(0,new Rotation2d(0)),
-                                        new SwerveModuleState(0,new Rotation2d(0)),
-                                        new SwerveModuleState(0,new Rotation2d(0)),
-                                        new SwerveModuleState(0,new Rotation2d(0))
-                                        };
-            m_robotDrive.setModuleStates(state);
-        }, m_robotDrive)); */    
     }
 
   /**
