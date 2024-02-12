@@ -14,8 +14,13 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.RangeSensor;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -44,7 +49,7 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
-  //the bird based gyro sensor
+  private final Ultrasonic m_Ultrasonic = new Ultrasonic(DIOConstants.kRangeTrig, DIOConstants.kRangeEcho);
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -68,6 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    Ultrasonic.setAutomaticMode(RangeSensor.kAutomaticMode);
   }
 
   @Override
@@ -81,6 +87,9 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+    double m_range = m_Ultrasonic.getRangeInches();
+    SmartDashboard.putNumber("Range: ", m_range);
+    SmartDashboard.putBoolean("Valid", m_Ultrasonic.isRangeValid());
   }
 
   /**
@@ -90,6 +99,10 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
+  }
+
+  public void ping() {
+    m_Ultrasonic.ping();
   }
 
   /**

@@ -128,7 +128,17 @@ public final class Constants {
     public static final int kLeftBumper = 5;
     public static final int kRightBumper = 6;
 
-    public static final int krightStickButton = 10;
+    public static final int kLeftStickButton = 9;
+    public static final int kRightStickButton = 10;
+  }
+
+  public static final class DIOConstants {
+    public static final int kLimitSwitch = 0;
+    public static final int kRangeTrig = 1;
+    public static final int kRangeEcho = 2;
+  }
+  public static final class RangeSensor {
+    public static final boolean kAutomaticMode = false;
   }
 
   public static final class AutoConstants {
