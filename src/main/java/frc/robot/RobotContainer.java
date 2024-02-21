@@ -16,13 +16,16 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -47,9 +50,7 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private boolean fieldRelative = true;
 
-
-  //limit switches
-    DigitalInput limitSwitch = new DigitalInput(0);
+    DigitalInput limitSwitch = new DigitalInput(DIOConstants.kLimitSwitch);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -106,7 +107,7 @@ public class RobotContainer {
 
 
         
-     new JoystickButton(m_driverController, OIConstants.krightStickButton)
+     new JoystickButton(m_driverController, OIConstants.kRightStickButton)
         .onTrue(new elevatorTest(m_robotDrive, 
             () -> m_driverController.getRawButton(OIConstants.kLeftBumper),
             false
@@ -117,6 +118,9 @@ public class RobotContainer {
             limitSwitch::get,
             true
         ));
+
+    new JoystickButton(m_driverController, OIConstants.kLeftStickButton)
+        .onTrue(new InstantCommand(m_robotDrive::ping));
 
     }
 
