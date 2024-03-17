@@ -17,7 +17,9 @@ public class FillBox extends Command {
 
     public FillBox(ManipulatorSubsystem manipulatorSubsystem) {
         m_manipulator = manipulatorSubsystem;
+
         addRequirements(manipulatorSubsystem);
+        setName("Fill Box");
     }
 
     @Override
@@ -30,7 +32,7 @@ public class FillBox extends Command {
         m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteIn);
 
-        m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
+        //m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
         m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
         
         if (m_outletTrailing.getAsBoolean()) {
@@ -44,6 +46,10 @@ public class FillBox extends Command {
     @Override
     public void end(boolean interrupted) {
         m_observedEdge = 0;
+        if (!interrupted) {
+            m_manipulator.chuteSetState(false);
+            m_manipulator.boxSetState(true);
+        }
     }
 
     @Override

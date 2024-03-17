@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.Constants.OIConstants;
@@ -26,7 +25,6 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -79,11 +77,13 @@ public class RobotContainer {
             m_robotManipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
             m_robotManipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
 
-            m_robotManipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
+            //m_robotManipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
             m_robotManipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
 
             SmartDashboard.putString("command:", "idle");
         }, m_robotManipulator));
+
+        SmartDashboard.putData(m_robotManipulator);
     }
 
     /**
@@ -126,14 +126,11 @@ public class RobotContainer {
         SequentialCommandGroup intakeRequest = new SequentialCommandGroup(); 
 
         intakeRequest.addCommands(new FillChute(m_robotManipulator));
-        intakeRequest.addCommands(new FillBox(m_robotManipulator)
-                                    .unless(() -> m_robotManipulator.getElevatorPosition() >= 0.01)                        
-        );      
 
         intakeRequest.addRequirements(m_robotManipulator);
-        
+
         SequentialCommandGroup ampRequest = new SequentialCommandGroup();
-        ampRequest.addCommands(new RaiseElevator(ampTimer, m_robotManipulator)); 
+        ampRequest.addCommands(new RaiseElevator(ampTimer, m_robotManipulator, 10)); 
         ampRequest.addCommands(new ScoreInAmp(ampTimer, m_robotManipulator));
         ampRequest.addCommands(new BringElevatorDown(m_robotManipulator));
 
@@ -148,14 +145,16 @@ public class RobotContainer {
                         })
                     );
 
-
         ///amp request
         new JoystickButton(m_driverController, OIConstants.kButtonBack)
             .onTrue(ampRequest);
 
-        //reset boxFull
+        //reset boxFull and chuteFull
         new JoystickButton(m_driverController, OIConstants.kButtonB)
-            .toggleOnTrue(new InstantCommand(() -> {m_robotManipulator.boxSetState(false);}));
+            .toggleOnTrue(new InstantCommand(() -> {
+                m_robotManipulator.boxSetState(false);
+                m_robotManipulator.chuteSetState(false);
+            }));
 
     }
 
@@ -212,5 +211,6 @@ public class RobotContainer {
 
         // Run path following command, then stop at the end.
         return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+
     }
 }

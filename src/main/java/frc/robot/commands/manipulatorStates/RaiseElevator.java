@@ -13,12 +13,16 @@ public class RaiseElevator extends Command {
     private ManipulatorSubsystem m_manipulator;
 
     private Timer m_ampTimer;
-    private BooleanSupplier m_elevatorUp = () -> m_manipulator.getElevatorPosition() == 10;
+    private BooleanSupplier m_elevatorUp;
 
-    public RaiseElevator(Timer ampTimer, ManipulatorSubsystem manipulator) {
+    public RaiseElevator(Timer ampTimer, ManipulatorSubsystem manipulator, double desiredHeight) {
         m_ampTimer = ampTimer;
         m_manipulator = manipulator;
+        m_elevatorUp = () -> m_manipulator.getElevatorPosition() >= desiredHeight;
+
+
         addRequirements(manipulator);
+        setName("Raise Elevator");
     }
 
     @Override
@@ -30,7 +34,9 @@ public class RaiseElevator extends Command {
         m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
 
-        m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorUp);
+        //m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorUp);
+        m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorUpPos);
+
         m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
 
         SmartDashboard.putNumber("amp timer", m_ampTimer.get());

@@ -15,6 +15,7 @@ public class ScoreInAmp extends Command {
     m_manipulator = manipulator;
 
     addRequirements(manipulator);
+    setName("Score In Amp");
   }
 
   @Override
@@ -25,7 +26,8 @@ public class ScoreInAmp extends Command {
     m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
     m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
 
-    m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
+    //m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
+
     m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOut);
 
     SmartDashboard.putNumber("amp timer", m_ampTimer.get());

@@ -13,16 +13,19 @@ public class FillChute extends Command {
     //also known as chute full on the paper
     private BooleanSupplier m_inletTrailing = () -> m_manipulator.inletSensorDetect(true) && !m_manipulator.inletSensorDetect(false);
 
-    private int m_observedEdge = 0;
+    private int m_observedEdge;
 
     public FillChute(ManipulatorSubsystem manipulatorSubsystem) {
         m_manipulator = manipulatorSubsystem;
+
         addRequirements(manipulatorSubsystem);
+        setName("Fill Chute");
     }
 
     @Override
     public void initialize() {
-
+        //for some reason, the command remembers observedEdge when the command is finished so you need to set it back to 0 yourself
+        m_observedEdge = 0;
     }
 
     @Override
@@ -30,7 +33,8 @@ public class FillChute extends Command {
         m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeIn);
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteIn);
 
-        m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
+        //m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
+
         m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
 
         if (m_inletTrailing.getAsBoolean()) {
@@ -42,8 +46,9 @@ public class FillChute extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        //for some reason, the command remembers observedEdge when the command is finished so you need to set it back to 0 yourself
-        m_observedEdge = 0;
+        if (!interrupted) {
+            m_manipulator.chuteSetState(true);
+        }
     }
 
     @Override

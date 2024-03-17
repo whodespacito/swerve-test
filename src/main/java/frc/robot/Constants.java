@@ -155,11 +155,12 @@ public final class Constants {
     public static final double kInletThreshold = 2.5;
     public static final double kOutletThreshold = 2.5;
 
-    //motors
+    //motor speeds
     public static final double kIntakeIn = .5;
     public static final double kIntakeOut = -0.5;
     public static final double kIntakeOff = 0;
     
+    public static final double kBoxInFast = 1;
     public static final double kBoxIn = 0.5;
     public static final double kBoxOut = -0.5;
     public static final double kBoxOff = 0;
@@ -172,7 +173,18 @@ public final class Constants {
     public static final double kElevatorDown = -0.1;
     public static final double kElevatorOff = 0;
 
-    public static final double kEmptyBoxToAmpTime = 10;
+    //positions
+    public static final double kElevatorDownPos = 0;
+    public static final double kElevatorUpPos = 10;
+
+    public static final double kCNDASpeakerPos = 10;
+    public static final double kCNDAAmpPos = 0;
+    public static final double kCNDATrapPos = 5;
+
+    //times
+    public static final double kEmptyBoxToAmpTime = 6; //time it takes for note to empty from box to amp
+    public static final double kBoxMotorFastTime = 4; //time to spin box motor to fast speed
+    public static final double kScoreSpeakerTime = 5; //time to shoot note to speaker
   }
 
   public static final class AutoConstants {

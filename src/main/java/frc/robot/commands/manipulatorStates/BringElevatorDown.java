@@ -10,6 +10,9 @@ public class BringElevatorDown extends Command {
 
     public BringElevatorDown(ManipulatorSubsystem manipulator) {
         m_manipulator = manipulator;
+
+        addRequirements(manipulator);
+        setName("Bring Elevator Down");
     }
 
     @Override
@@ -21,7 +24,10 @@ public class BringElevatorDown extends Command {
         m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
 
-        m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorDown);
+        //m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorDown);
+
+        m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorDownPos);
+
         m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
 
         SmartDashboard.putString("command:", "Lower Elevator");
