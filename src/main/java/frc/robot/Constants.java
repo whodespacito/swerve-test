@@ -121,12 +121,16 @@ public final class Constants {
     public static final double kDriveDeadband = 0.05;
 
     // Button numbers
-    public static final int kbuttonA = 1;
-    public static final int kbuttonB = 2;
-    public static final int kbuttonX = 3;
-    public static final int kbuttonY = 4;
+    public static final int kButtonA = 1;
+    public static final int kButtonB = 2;
+    public static final int kButtonX = 3;
+    public static final int kButtonY = 4;
     public static final int kLeftBumper = 5;
     public static final int kRightBumper = 6;
+
+    public static final int kButtonBack = 7;
+    public static final int kButtonStart = 8;
+
 
     public static final int kLeftStickButton = 9;
     public static final int kRightStickButton = 10;
@@ -137,8 +141,56 @@ public final class Constants {
     public static final int kRangeTrig = 1;
     public static final int kRangeEcho = 2;
   }
+
   public static final class RangeSensor {
     public static final boolean kAutomaticMode = false;
+  }
+
+  public static final class ManipulatorConstants {
+
+    //color sensors
+    public static final int kInletColorSensor = 0;
+    public static final int kOutletColorSensor = 1;
+
+    public static final double kInletThreshold = 2.5;
+    public static final double kOutletThreshold = 2.5;
+
+    //motor speeds
+    public static final double kIntakeIn = .5;
+    public static final double kIntakeOut = -0.5;
+    public static final double kIntakeOff = 0;
+    
+    public static final double kBoxInFast = 1;
+    public static final double kBoxIn = 0.5;
+    public static final double kBoxOut = -0.5;
+    public static final double kBoxOff = 0;
+    
+    public static final double kChuteIn = 0.5;
+    public static final double kChuteOut = -0.5;
+    public static final double kChuteOff = 0;
+
+    public static final double kElevatorUp = 0.1;
+    public static final double kElevatorDown = -0.1;
+    public static final double kElevatorOff = 0;
+
+    //positions
+    public static final double kElevatorPosTolerance = 0.1;
+
+    public static final double kElevatorDownPos = 0;
+    public static final double kElevatorUpPos = 10;
+    public static final double kElevatorAmpPos = 80;
+    public static final double kElevatorSpkrPos = 0;
+    public static final double kElevatorTrpPos = 100;
+
+    public static final double kCNDAPosTolerance = 0.1;
+    public static final double kCNDASpeakerPos = 10;
+    public static final double kCNDAAmpPos = 0;
+    public static final double kCNDATrapPos = 5;
+
+    //times
+    public static final double kEmptyBoxToAmpTime = 6; //time it takes for note to empty from box to amp
+    public static final double kBoxMotorFastTime = 4; //time to spin box motor to fast speed
+    public static final double kScoreSpeakerTime = 5; //time to shoot note to speaker
   }
 
   public static final class AutoConstants {

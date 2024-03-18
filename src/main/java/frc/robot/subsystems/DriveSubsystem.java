@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.RangeSensor;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -49,7 +48,7 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
-  private final Ultrasonic m_Ultrasonic = new Ultrasonic(DIOConstants.kRangeTrig, DIOConstants.kRangeEcho);
+  private final Ultrasonic m_ultrasonic = new Ultrasonic(DIOConstants.kRangeTrig, DIOConstants.kRangeEcho);
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -87,9 +86,9 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    double m_range = m_Ultrasonic.getRangeInches();
+    double m_range = m_ultrasonic.getRangeInches();
     SmartDashboard.putNumber("Range: ", m_range);
-    SmartDashboard.putBoolean("Valid", m_Ultrasonic.isRangeValid());
+    SmartDashboard.putBoolean("Valid", m_ultrasonic.isRangeValid());
   }
 
   /**
@@ -102,8 +101,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void ping() {
-    m_Ultrasonic.ping();
+    m_ultrasonic.ping();
   }
+
 
   /**
    * Resets the odometry to the specified pose.
