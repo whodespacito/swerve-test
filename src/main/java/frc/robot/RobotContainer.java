@@ -124,13 +124,11 @@ public class RobotContainer {
 
         //intake command group
         SequentialCommandGroup intakeRequest = new SequentialCommandGroup(); 
-
         intakeRequest.addCommands(new FillChute(m_robotManipulator));
-
         intakeRequest.addRequirements(m_robotManipulator);
 
         SequentialCommandGroup ampRequest = new SequentialCommandGroup();
-        ampRequest.addCommands(new RaiseElevator(ampTimer, m_robotManipulator, 10)); 
+        ampRequest.addCommands(new RaiseElevator(m_robotManipulator, ManipulatorConstants.kElevatorAmpPos)); 
         ampRequest.addCommands(new ScoreInAmp(ampTimer, m_robotManipulator));
         ampRequest.addCommands(new BringElevatorDown(m_robotManipulator));
 
@@ -138,12 +136,8 @@ public class RobotContainer {
         
         //intake request
         new JoystickButton(m_driverController, OIConstants.kButtonA)
-            .onTrue(intakeRequest
-                        .finallyDo((boolean interrupt) -> {
-                            if (interrupt) return;
-                            m_robotManipulator.boxSetState(true);
-                        })
-                    );
+            .onTrue(intakeRequest);
+ 
 
         ///amp request
         new JoystickButton(m_driverController, OIConstants.kButtonBack)
