@@ -174,6 +174,7 @@ public final class Constants {
     public static final double kElevatorOff = 0;
 
     //positions
+
     public static final double kElevatorPosTolerance = 0.1;
 
     public static final double kElevatorDownPos = 0;
@@ -183,6 +184,7 @@ public final class Constants {
     public static final double kElevatorTrpPos = 100;
 
     public static final double kCNDAPosTolerance = 0.1;
+
     public static final double kCNDASpeakerPos = 10;
     public static final double kCNDAAmpPos = 0;
     public static final double kCNDATrapPos = 5;

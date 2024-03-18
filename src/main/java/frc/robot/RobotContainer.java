@@ -131,12 +131,14 @@ public class RobotContainer {
         ampRequest.addCommands(new RaiseElevator(m_robotManipulator, ManipulatorConstants.kElevatorAmpPos)); 
         ampRequest.addCommands(new ScoreInAmp(ampTimer, m_robotManipulator));
         ampRequest.addCommands(new BringElevatorDown(m_robotManipulator));
+
         ampRequest.addRequirements(m_robotManipulator);
         
         //intake request
         new JoystickButton(m_driverController, OIConstants.kButtonA)
             .onTrue(intakeRequest);
  
+
         ///amp request
         new JoystickButton(m_driverController, OIConstants.kButtonBack)
             .onTrue(ampRequest);

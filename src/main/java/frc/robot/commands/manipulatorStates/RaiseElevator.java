@@ -11,11 +11,11 @@ public class RaiseElevator extends Command {
     private ManipulatorSubsystem m_manipulator;
 
     private Timer m_ampTimer;
+
     private double m_desiredHeight;
 
     public RaiseElevator(ManipulatorSubsystem manipulator, double desiredHeight) {
         m_manipulator = manipulator;
-
 
         addRequirements(manipulator);
         setName("Raise Elevator");
@@ -48,5 +48,6 @@ public class RaiseElevator extends Command {
     public boolean isFinished() {
 //        return m_elevatorUp.getAsBoolean();
         return Math.abs(m_manipulator.getElevatorPosition() - m_desiredHeight) < ManipulatorConstants.kElevatorPosTolerance;
+
     }
 }
