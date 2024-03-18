@@ -148,6 +148,8 @@ public final class Constants {
 
   public static final class ManipulatorConstants {
 
+    public static final double kTolerance = 0.1;
+
     //color sensors
     public static final int kInletColorSensor = 0;
     public static final int kOutletColorSensor = 1;

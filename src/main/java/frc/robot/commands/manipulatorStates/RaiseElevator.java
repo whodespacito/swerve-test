@@ -1,7 +1,5 @@
 package frc.robot.commands.manipulatorStates;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,13 +11,12 @@ public class RaiseElevator extends Command {
     private ManipulatorSubsystem m_manipulator;
 
     private Timer m_ampTimer;
-    private BooleanSupplier m_elevatorUp;
+    private double m_desiredHeight;
 
     public RaiseElevator(Timer ampTimer, ManipulatorSubsystem manipulator, double desiredHeight) {
         m_ampTimer = ampTimer;
         m_manipulator = manipulator;
-        m_elevatorUp = () -> m_manipulator.getElevatorPosition() >= desiredHeight;
-
+        m_desiredHeight = desiredHeight;
 
         addRequirements(manipulator);
         setName("Raise Elevator");
@@ -33,10 +30,7 @@ public class RaiseElevator extends Command {
     public void execute() {
         m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
-
-        //m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorUp);
         m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorUpPos);
-
         m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
 
         SmartDashboard.putNumber("amp timer", m_ampTimer.get());
@@ -51,6 +45,6 @@ public class RaiseElevator extends Command {
 
     @Override
     public boolean isFinished() {
-        return m_elevatorUp.getAsBoolean();
+        return m_manipulator.getElevatorPosition() > (m_desiredHeight - ManipulatorConstants.kTolerance);
     }
 }

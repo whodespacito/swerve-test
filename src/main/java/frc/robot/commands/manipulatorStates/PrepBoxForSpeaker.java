@@ -6,12 +6,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.subsystems.ManipulatorSubsystem;
 
-public class BoxSetSpeakerState extends Command {
+public class PrepBoxForSpeaker extends Command {
 
     private ManipulatorSubsystem m_manipulator;
     private Timer m_timer;
 
-  public BoxSetSpeakerState(Timer timer, ManipulatorSubsystem manipulatorSubsystem) {
+  public PrepBoxForSpeaker(Timer timer, ManipulatorSubsystem manipulatorSubsystem) {
     m_manipulator = manipulatorSubsystem;
     m_timer = timer;
     addRequirements(manipulatorSubsystem);
@@ -27,8 +27,9 @@ public class BoxSetSpeakerState extends Command {
     m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
     m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxInFast);
     m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
-    m_manipulator.CNDASetPosition(ManipulatorConstants.kCNDASpeakerPos);
 
+    m_manipulator.CNDASetPosition(ManipulatorConstants.kCNDASpeakerPos);
+    m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorDownPos);
   }
 
   @Override
@@ -38,11 +39,8 @@ public class BoxSetSpeakerState extends Command {
 
   @Override
   public boolean isFinished() {
-//    private double CNDAPosition = m_manipulator.getCNDAPosition();
-//    private double CNDALowerRange;
-//    private double CNDAHigherRange = ManipulatorConstants.kCNDASpeakerPos
-
-//    private boolean AcceptableCNDARange = (CNDAPosition >) && ()
-    return m_timer.hasElapsed(ManipulatorConstants.kBoxMotorFastTime) && m_manipulator.getCNDAPosition() > 9.5;
+    boolean acceptableCNDA = m_manipulator.getCNDAPosition() > (ManipulatorConstants.kCNDASpeakerPos - ManipulatorConstants.kTolerance);
+    boolean acceptableElevator = m_manipulator.getElevatorPosition() < (ManipulatorConstants.kElevatorDownPos + ManipulatorConstants.kTolerance);
+    return m_timer.hasElapsed(ManipulatorConstants.kBoxMotorFastTime) && acceptableCNDA && acceptableElevator;
   }
 }
