@@ -38,6 +38,6 @@ public class BringElevatorDown extends Command {
 
     @Override
     public boolean isFinished() {
-        return m_manipulator.getElevatorPosition() < 0.01;
+        return m_manipulator.getElevatorPosition() < (ManipulatorConstants.kElevatorDownPos + ManipulatorConstants.kTolerance);
     }
 }

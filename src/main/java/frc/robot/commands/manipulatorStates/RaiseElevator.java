@@ -31,7 +31,6 @@ public class RaiseElevator extends Command {
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
 
         m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorUpPos);
-
         m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
 
         SmartDashboard.putNumber("amp timer", m_ampTimer.get());
@@ -48,6 +47,5 @@ public class RaiseElevator extends Command {
     public boolean isFinished() {
 //        return m_elevatorUp.getAsBoolean();
         return Math.abs(m_manipulator.getElevatorPosition() - m_desiredHeight) < ManipulatorConstants.kElevatorPosTolerance;
-
     }
 }
