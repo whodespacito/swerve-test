@@ -19,7 +19,9 @@ public class ScoreInAmp extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_ampTimer.restart();
+  }
 
   @Override
   public void execute() {

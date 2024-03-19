@@ -34,8 +34,10 @@ import java.util.List;
 import frc.robot.commands.manipulatorStates.BringElevatorDown;
 import frc.robot.commands.manipulatorStates.FillBox;
 import frc.robot.commands.manipulatorStates.FillChute;
+import frc.robot.commands.manipulatorStates.PrepBoxForSpeaker;
 import frc.robot.commands.manipulatorStates.RaiseElevator;
 import frc.robot.commands.manipulatorStates.ScoreInAmp;
+import frc.robot.commands.manipulatorStates.ScoreSpeaker;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -50,8 +52,9 @@ public class RobotContainer {
 
     // The driver's controller
     XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    XboxController m_operatorController = new XboxController(1);
 
-    private boolean m_fieldRelative = true;
+    private boolean m_fieldRelative = false;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -115,36 +118,43 @@ public class RobotContainer {
             }
             , m_robotDrive));
 
-        new JoystickButton(m_driverController, OIConstants.kLeftStickButton)
-            .onTrue(new InstantCommand(m_robotDrive::ping));
 
         //manipulator tests
 
-        Timer ampTimer = new Timer();
+        Timer stateTimer = new Timer();
 
         //intake command group
         SequentialCommandGroup intakeRequest = new SequentialCommandGroup(); 
         intakeRequest.addCommands(new FillChute(m_robotManipulator));
         intakeRequest.addRequirements(m_robotManipulator);
 
+        SequentialCommandGroup speakerRequest = new SequentialCommandGroup();
+        speakerRequest.addCommands(new PrepBoxForSpeaker(stateTimer, m_robotManipulator));
+        speakerRequest.addCommands(new ScoreSpeaker(stateTimer, m_robotManipulator));
+        speakerRequest.addRequirements(m_robotManipulator);
+
         SequentialCommandGroup ampRequest = new SequentialCommandGroup();
         ampRequest.addCommands(new RaiseElevator(m_robotManipulator, ManipulatorConstants.kElevatorAmpPos)); 
-        ampRequest.addCommands(new ScoreInAmp(ampTimer, m_robotManipulator));
+        ampRequest.addCommands(new ScoreInAmp(stateTimer, m_robotManipulator));
         ampRequest.addCommands(new BringElevatorDown(m_robotManipulator));
 
         ampRequest.addRequirements(m_robotManipulator);
         
         //intake request
-        new JoystickButton(m_driverController, OIConstants.kButtonA)
+        new JoystickButton(m_operatorController, OIConstants.kButtonA)
             .onTrue(intakeRequest);
  
 
         ///amp request
-        new JoystickButton(m_driverController, OIConstants.kButtonBack)
+        new JoystickButton(m_operatorController, OIConstants.kButtonB)
             .onTrue(ampRequest);
 
+        //speaker request
+        new JoystickButton(m_operatorController, OIConstants.kButtonX)
+            .onTrue(speakerRequest);
+
         //reset boxFull and chuteFull
-        new JoystickButton(m_driverController, OIConstants.kButtonB)
+        new JoystickButton(m_operatorController, OIConstants.kButtonB)
             .toggleOnTrue(new InstantCommand(() -> {
                 m_robotManipulator.boxSetState(false);
                 m_robotManipulator.chuteSetState(false);

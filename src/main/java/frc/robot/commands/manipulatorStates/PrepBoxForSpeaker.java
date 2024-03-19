@@ -39,8 +39,9 @@ public class PrepBoxForSpeaker extends Command {
 
   @Override
   public boolean isFinished() {
-    boolean acceptableCNDA = m_manipulator.getCNDAPosition() > (ManipulatorConstants.kCNDASpeakerPos - ManipulatorConstants.kTolerance);
-    boolean acceptableElevator = m_manipulator.getElevatorPosition() < (ManipulatorConstants.kElevatorDownPos + ManipulatorConstants.kTolerance);
+    boolean acceptableCNDA = m_manipulator.getCNDAPosition() > (ManipulatorConstants.kCNDASpeakerPos - ManipulatorConstants.kCNDAPosTolerance);
+    boolean acceptableElevator = m_manipulator.getElevatorPosition() < (ManipulatorConstants.kElevatorDownPos + ManipulatorConstants.kElevatorPosTolerance);
+
     return m_timer.hasElapsed(ManipulatorConstants.kBoxMotorFastTime) && acceptableCNDA && acceptableElevator;
   }
 }

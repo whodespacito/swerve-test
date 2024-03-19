@@ -48,8 +48,6 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
-  private final Ultrasonic m_ultrasonic = new Ultrasonic(DIOConstants.kRangeTrig, DIOConstants.kRangeEcho);
-
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
@@ -86,9 +84,6 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    double m_range = m_ultrasonic.getRangeInches();
-    SmartDashboard.putNumber("Range: ", m_range);
-    SmartDashboard.putBoolean("Valid", m_ultrasonic.isRangeValid());
   }
 
   /**
@@ -99,11 +94,6 @@ public class DriveSubsystem extends SubsystemBase {
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
-
-  public void ping() {
-    m_ultrasonic.ping();
-  }
-
 
   /**
    * Resets the odometry to the specified pose.

@@ -10,12 +10,11 @@ public class RaiseElevator extends Command {
 
     private ManipulatorSubsystem m_manipulator;
 
-    private Timer m_ampTimer;
-
     private double m_desiredHeight;
 
     public RaiseElevator(ManipulatorSubsystem manipulator, double desiredHeight) {
         m_manipulator = manipulator;
+        m_desiredHeight = desiredHeight;
 
         addRequirements(manipulator);
         setName("Raise Elevator");
@@ -33,19 +32,19 @@ public class RaiseElevator extends Command {
         m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorUpPos);
         m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
 
-        SmartDashboard.putNumber("amp timer", m_ampTimer.get());
         SmartDashboard.putString("command:", "Raise Elevator");
     
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_ampTimer.restart();
     }
 
     @Override
     public boolean isFinished() {
-//        return m_elevatorUp.getAsBoolean();
+        SmartDashboard.putNumber("the number", Math.abs(m_manipulator.getElevatorPosition() - m_desiredHeight));
         return Math.abs(m_manipulator.getElevatorPosition() - m_desiredHeight) < ManipulatorConstants.kElevatorPosTolerance;
+
+
     }
 }

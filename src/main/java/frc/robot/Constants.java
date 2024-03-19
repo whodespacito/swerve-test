@@ -118,6 +118,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
 
     // Button numbers
@@ -148,8 +149,6 @@ public final class Constants {
 
   public static final class ManipulatorConstants {
 
-    public static final double kTolerance = 0.1;
-
     //color sensors
     public static final int kInletColorSensor = 0;
     public static final int kOutletColorSensor = 1;
@@ -177,7 +176,7 @@ public final class Constants {
 
     //positions
 
-    public static final double kElevatorPosTolerance = 0.1;
+    public static final double kElevatorPosTolerance = 0.3;
 
     public static final double kElevatorDownPos = 0;
     public static final double kElevatorUpPos = 10;

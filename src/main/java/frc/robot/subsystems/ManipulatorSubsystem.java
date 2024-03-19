@@ -42,7 +42,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         if (m_elevatorSetPos < m_elevatorCurPos) {
            m_elevatorCurPos = Math.max(m_elevatorCurPos - .1, 0);
         } else if (m_elevatorSetPos > m_elevatorCurPos) {
-           m_elevatorCurPos = Math.min(m_elevatorCurPos + .1, 10);
+           m_elevatorCurPos = Math.min(m_elevatorCurPos + .1, 100);
         }
 
         //emulated CNDA set position
