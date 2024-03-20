@@ -16,8 +16,6 @@ import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RangeSensor;
 import frc.utils.SwerveUtils;

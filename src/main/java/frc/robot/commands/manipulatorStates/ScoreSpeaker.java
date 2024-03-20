@@ -4,7 +4,10 @@
 
 package frc.robot.commands.manipulatorStates;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.subsystems.ManipulatorSubsystem;
@@ -12,6 +15,10 @@ import frc.robot.subsystems.ManipulatorSubsystem;
 public class ScoreSpeaker extends Command {
     private ManipulatorSubsystem m_manipulator;
     private Timer m_timer;
+
+    private BooleanSupplier m_outletTrailing = () -> m_manipulator.outletSensorDetect(true) && !m_manipulator.outletSensorDetect(false);
+
+    private int m_observedEdge = 0;
 
     public ScoreSpeaker(Timer timer, ManipulatorSubsystem manipulatorSubsystem) {
         m_manipulator = manipulatorSubsystem;
@@ -28,18 +35,32 @@ public class ScoreSpeaker extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxInFast);
-        m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
-        m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOut);
+        m_manipulator.boxLeftMotorSpeed(ManipulatorConstants.kBoxLeftOutFast);
+        m_manipulator.boxRightMotorSpeed(ManipulatorConstants.kBoxRightOutFast);
+
+//        m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
+        m_manipulator.intakeFrontMotorSpeed(ManipulatorConstants.kIntakeFrontOut);
+        m_manipulator.intakeRearMotorSpeed(ManipulatorConstants.kIntakeRearOut);
+
+        m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteIn);
+
+        if (m_outletTrailing.getAsBoolean()) {
+            m_observedEdge++;
+        }
+
+        SmartDashboard.putNumber("box observed edge", m_observedEdge);
+        SmartDashboard.putString("command:", "Score Speaker");
     }
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        m_observedEdge = 0;
+    }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return m_timer.hasElapsed(ManipulatorConstants.kScoreSpeakerTime);
+        return m_observedEdge >= 2;
     }
 }

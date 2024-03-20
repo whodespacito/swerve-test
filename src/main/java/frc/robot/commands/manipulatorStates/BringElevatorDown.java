@@ -21,14 +21,19 @@ public class BringElevatorDown extends Command {
 
     @Override
     public void execute() {
-        m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
+//        m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
+        m_manipulator.intakeFrontMotorSpeed(ManipulatorConstants.kIntakeFrontOut);
+        m_manipulator.intakeRearMotorSpeed(ManipulatorConstants.kIntakeRearOut);
+        
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
 
         //m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorDown);
 
         m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorDownPos);
 
-        m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
+        m_manipulator.boxLeftMotorSpeed(ManipulatorConstants.kBoxLeftOff);
+        m_manipulator.boxRightMotorSpeed(ManipulatorConstants.kBoxRightOff);
+
 
         SmartDashboard.putString("command:", "Lower Elevator");
     }

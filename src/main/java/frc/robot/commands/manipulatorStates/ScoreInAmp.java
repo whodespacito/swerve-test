@@ -25,12 +25,16 @@ public class ScoreInAmp extends Command {
 
   @Override
   public void execute() {
-    m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
+//    m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
+    m_manipulator.intakeFrontMotorSpeed(ManipulatorConstants.kIntakeFrontOut);
+    m_manipulator.intakeRearMotorSpeed(ManipulatorConstants.kIntakeRearOut);
+
     m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
 
     //m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
 
-    m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOut);
+    m_manipulator.boxLeftMotorSpeed(ManipulatorConstants.kBoxLeftOut);
+    m_manipulator.boxRightMotorSpeed(ManipulatorConstants.kBoxRightOut);
 
     SmartDashboard.putNumber("amp timer", m_ampTimer.get());
     SmartDashboard.putString("command:", "Score In Amp");

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -14,8 +15,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ManipulatorConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.fasterxml.jackson.databind.deser.std.*;;
 
 public class ManipulatorSubsystem extends SubsystemBase {
 
@@ -29,22 +32,26 @@ public class ManipulatorSubsystem extends SubsystemBase {
 //    private final CANSparkMax m_climber;
 
     private final VictorSPX  m_boxLeft;
-    private final VictorSPX  m_boxRight;
+    private final TalonSRX  m_boxRight;
     private final VictorSPX  m_chute;
 
     private final SparkPIDController m_CNDAPID;
     private final SparkPIDController m_elevatorPID;
 
-    private static double m_intakeMotorSpeed = 0;
+    private final RelativeEncoder m_elevatorEncoder;
+    private final RelativeEncoder m_CNDAEncoder;
+
+//    private static double m_intakeMotorSpeed = 0;
+    private static double m_intakeFrontMotorSpeed = 0;
+    private static double m_intakeRearMotorSpeed = 0;
     private static double m_chuteMotorSpeed = 0;
 
-    private static double m_boxMotorSpeed = 0;
+    private static double m_boxLeftMotorSpeed = 0;
+    private static double m_boxRightMotorSpeed = 0;
 
     private static double m_elevatorSetPos = 0;
-    private static double m_elevatorCurPos = 0;
 
-    private static double m_CNDASetPos = 0;
-    private static double m_CNDACurPos = 0;
+    private static double m_CNDASetPos = ManipulatorConstants.kCNDAStartupPos;
 
 
     private static boolean m_boxFull = false;
@@ -63,9 +70,12 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_CNDA = new CANSparkMax(ManipulatorConstants.kCNDACanId, MotorType.kBrushless);
 //        m_climber = new CANSparkMax(ManipulatorConstants.kClimberCanId, MotorType.kBrushless);
 
-        m_boxRight = new VictorSPX(ManipulatorConstants.kBoxRightCanId);
+        m_boxRight = new TalonSRX(ManipulatorConstants.kBoxRightCanId);
         m_chute = new VictorSPX(ManipulatorConstants.kChuteCanId);
         m_boxLeft = new VictorSPX(ManipulatorConstants.kBoxLeftCanId);
+
+        m_elevatorEncoder = m_elevator.getEncoder();
+        m_CNDAEncoder = m_CNDA.getEncoder();
 
         m_elevatorPID = m_elevator.getPIDController();
         m_elevatorPID.setP(1);
@@ -75,10 +85,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_elevatorPID.setOutputRange(-1, 1);
 
         m_CNDAPID = m_CNDA.getPIDController();
-        m_CNDAPID.setP(1);
-        m_CNDAPID.setI(0);
-        m_CNDAPID.setD(0);
-        m_CNDAPID.setFF(0);
+        m_CNDAPID.setP(ManipulatorConstants.kCNDAP);
+        m_CNDAPID.setI(ManipulatorConstants.kCNDAI);
+        m_CNDAPID.setD(ManipulatorConstants.kCNDAD);
+        m_CNDAPID.setFF(ManipulatorConstants.kCNDAFF);
         m_CNDAPID.setOutputRange(-1, 1);
 
         m_elevator.burnFlash();
@@ -93,10 +103,13 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_elevatorPID.setReference(m_elevatorSetPos, ControlType.kPosition);
         m_CNDAPID.setReference(m_CNDASetPos, ControlType.kPosition);
 
-        m_intakeFront.set(m_intakeMotorSpeed);
-        m_intakeRear.set(m_intakeMotorSpeed);
+        m_intakeFront.set(m_intakeFrontMotorSpeed);
+        m_intakeRear.set(m_intakeRearMotorSpeed);
 
-        m_chute.set(ControlMode.Velocity, m_chuteMotorSpeed);
+        m_boxLeft.set(VictorSPXControlMode.PercentOutput, m_boxLeftMotorSpeed);
+        m_boxRight.set(TalonSRXControlMode.PercentOutput, m_boxRightMotorSpeed);
+
+        m_chute.set(VictorSPXControlMode.PercentOutput, m_chuteMotorSpeed);
 
 
         /* 
@@ -114,6 +127,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
            m_CNDACurPos = Math.min(m_CNDACurPos + .1, 10);
         }
         */
+
         //sets sensors detect and last detect
         m_inletLastDetect = m_inletDetect;
         m_outletLastDetect = m_outletDetect;
@@ -127,26 +141,52 @@ public class ManipulatorSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Box full", m_boxFull);
         SmartDashboard.putBoolean("Chute full", m_chuteFull);
 
-        SmartDashboard.putNumber("intake motor speed", m_intakeMotorSpeed);
+        SmartDashboard.putNumber("intake front motor speed", m_intakeFrontMotorSpeed);
+        SmartDashboard.putNumber("intake rear motor speed", m_intakeRearMotorSpeed);
+
         SmartDashboard.putNumber("chute motor speed", m_chuteMotorSpeed);
-        SmartDashboard.putNumber("box motor speed", m_boxMotorSpeed);
+
+        SmartDashboard.putNumber("box left motor speed", m_boxLeftMotorSpeed);
+        SmartDashboard.putNumber("box right motor speed", m_boxRightMotorSpeed);
 
         SmartDashboard.putNumber("elevator set position", m_elevatorSetPos);
-        SmartDashboard.putNumber("elevator current position", m_elevatorCurPos);
+        SmartDashboard.putNumber("elevator current position", m_elevatorEncoder.getPosition());
 
         SmartDashboard.putNumber("CNDA set position", m_CNDASetPos);
-        SmartDashboard.putNumber("CNDA current position", m_CNDACurPos);
+        SmartDashboard.putNumber("CNDA current position", m_CNDAEncoder.getPosition());
+
+//        SmartDashboard.putNumber("CNDA current position", m_CNDACurPos);
+//         SmartDashboard.putNumber("elevator current position", m_elevatorCurPos);
     }
     
-    
-    public void intakeMotorSpeed(double speed) {
-        m_intakeMotorSpeed = speed;
+    //regular motors
+
+    // public void intakeMotorSpeed(double speed) {
+    // m_intakeMotorSpeed = speed;
+    // }
+
+    public void intakeFrontMotorSpeed(double speed) {
+        m_intakeFrontMotorSpeed = speed;
+    }
+
+    public void intakeRearMotorSpeed(double speed) {
+        m_intakeRearMotorSpeed = speed;
     }
 
     public void chuteMotorSpeed(double speed) {
         m_chuteMotorSpeed = speed;
     }
 
+    //box motors
+    public void boxLeftMotorSpeed(double speed) {
+        m_boxLeftMotorSpeed = speed;
+    }
+
+    public void boxRightMotorSpeed(double speed) {
+        m_boxRightMotorSpeed = speed;
+    }
+
+    //position motors
     public void elevatorSetPosition(double position) {
         m_elevatorSetPos = position;
     }
@@ -155,19 +195,19 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_CNDASetPos = position;
     }
 
-    public void boxMotorSpeed(double speed) {
-        m_boxMotorSpeed = speed;
-    }
-
-
+    //get positions    
     public double getElevatorPosition() {
-        return m_elevatorCurPos;
+        return m_elevatorEncoder.getPosition();
+        //return m_elevatorCurPos;
+        
     }
 
     public double getCNDAPosition() {
-        return m_CNDACurPos;
+        return m_CNDAEncoder.getPosition();
+        //return m_CNDACurPos;
     }
 
+    //color sensors
     public boolean inletSensorDetect(boolean lastDetect) {
         if (lastDetect) {
             return m_inletLastDetect;

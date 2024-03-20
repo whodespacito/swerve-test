@@ -153,8 +153,8 @@ public final class Constants {
     public static final int kInletColorSensor = 0;
     public static final int kOutletColorSensor = 1;
 
-    public static final double kInletThreshold = 2.5;
-    public static final double kOutletThreshold = 2.5;
+    public static final double kInletThreshold = 1.1;
+    public static final double kOutletThreshold = 1.1;
 
     //can ids
     public static final int kElevatorCanId = 9;
@@ -169,8 +169,16 @@ public final class Constants {
 
     //motor speeds
     public static final double kIntakeIn = 0.5;
-    public static final double kIntakeOut = -0.5;
+    public static final double kIntakeOut = -0.2;
     public static final double kIntakeOff = 0;
+    
+    public static final double kIntakeFrontIn = 0.5;
+    public static final double kIntakeFrontOut = -0.2;
+    public static final double kIntakeFrontOff = 0;
+    
+    public static final double kIntakeRearIn = 0.5;
+    public static final double kIntakeRearOut = -0.2;
+    public static final double kIntakeRearOff = 0;
     
     public static final double kBoxRightOutFast = 1;
     public static final double kBoxRightIn = 0.1;
@@ -182,7 +190,7 @@ public final class Constants {
     public static final double kBoxLeftOut = 0.1;
     public static final double kBoxLeftOff = 0;
 
-    public static final double kChuteIn = 0.5;
+    public static final double kChuteIn = 1;
     public static final double kChuteOut = -0.5;
     public static final double kChuteOff = 0;
 
@@ -202,14 +210,31 @@ public final class Constants {
 
     public static final double kCNDAPosTolerance = 0.1;
 
-    public static final double kCNDASpeakerPos = 10;
+    public static final double kCNDASpeakerPos = 1.1;
     public static final double kCNDAAmpPos = 0;
     public static final double kCNDATrapPos = 5;
+    public static final double kCNDAStartupPos = kCNDASpeakerPos;
+
+    //PID constants
+
+    //Elevator
+    public static final double kElevatorP = 1;
+    public static final double kElevatorI = 0;
+    public static final double kElevatorD = 0;
+    public static final double kElevatorFF = 0;
+    
+    //CNDA
+    public static final double kCNDAP = 0.5;
+    public static final double kCNDAI = 0;
+    public static final double kCNDAD = 0;
+    public static final double kCNDAFF = 0;
+
+
 
     //times
-    public static final double kEmptyBoxToAmpTime = 6; //time it takes for note to empty from box to amp
-    public static final double kBoxMotorFastTime = 4; //time to spin box motor to fast speed
-    public static final double kScoreSpeakerTime = 5; //time to shoot note to speaker
+    public static final double kEmptyBoxToAmpTime = 0.5; //time it takes for note to empty from box to amp
+    public static final double kBoxMotorFastTime = 0.5; //time to spin box motor to fast speed
+    public static final double kScoreSpeakerTime = 0.5; //time to shoot note to speaker
   }
 
   public static final class AutoConstants {

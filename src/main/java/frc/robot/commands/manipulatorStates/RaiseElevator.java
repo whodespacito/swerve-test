@@ -1,6 +1,5 @@
 package frc.robot.commands.manipulatorStates;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ManipulatorConstants;
@@ -26,11 +25,16 @@ public class RaiseElevator extends Command {
 
     @Override
     public void execute() {
-        m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
+//        m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
+        m_manipulator.intakeFrontMotorSpeed(ManipulatorConstants.kIntakeFrontOut);
+        m_manipulator.intakeRearMotorSpeed(ManipulatorConstants.kIntakeRearOut);
+
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
 
         m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorUpPos);
-        m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
+
+        m_manipulator.boxLeftMotorSpeed(ManipulatorConstants.kBoxLeftOff);
+        m_manipulator.boxRightMotorSpeed(ManipulatorConstants.kBoxRightOff);
 
         SmartDashboard.putString("command:", "Raise Elevator");
     
@@ -42,7 +46,6 @@ public class RaiseElevator extends Command {
 
     @Override
     public boolean isFinished() {
-        SmartDashboard.putNumber("the number", Math.abs(m_manipulator.getElevatorPosition() - m_desiredHeight));
         return Math.abs(m_manipulator.getElevatorPosition() - m_desiredHeight) < ManipulatorConstants.kElevatorPosTolerance;
 
 

@@ -24,9 +24,14 @@ public class PrepBoxForSpeaker extends Command {
 
   @Override
   public void execute() {
-    m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
-    m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxInFast);
+//    m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
+    m_manipulator.intakeFrontMotorSpeed(ManipulatorConstants.kIntakeFrontOut);
+    m_manipulator.intakeRearMotorSpeed(ManipulatorConstants.kIntakeRearOut);
+    
     m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
+
+    m_manipulator.boxLeftMotorSpeed(ManipulatorConstants.kBoxLeftOutFast);
+    m_manipulator.boxRightMotorSpeed(ManipulatorConstants.kBoxRightOutFast);
 
     m_manipulator.CNDASetPosition(ManipulatorConstants.kCNDASpeakerPos);
     m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorDownPos);

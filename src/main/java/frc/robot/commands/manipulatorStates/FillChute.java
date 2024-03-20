@@ -30,12 +30,14 @@ public class FillChute extends Command {
 
     @Override
     public void execute() {
-        m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeIn);
+//        m_manipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeIn);
+        m_manipulator.intakeFrontMotorSpeed(ManipulatorConstants.kIntakeFrontIn);
+        m_manipulator.intakeRearMotorSpeed(ManipulatorConstants.kIntakeRearIn);
+        
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteIn);
 
-        //m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
-
-        m_manipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
+        m_manipulator.boxLeftMotorSpeed(ManipulatorConstants.kBoxLeftOff);
+        m_manipulator.boxRightMotorSpeed(ManipulatorConstants.kBoxRightOff);
 
         if (m_inletTrailing.getAsBoolean()) {
             m_observedEdge++;

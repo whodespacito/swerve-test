@@ -77,11 +77,14 @@ public class RobotContainer {
 
         //manipulator idle is the default
         m_robotManipulator.setDefaultCommand(new RunCommand(() -> {
-            m_robotManipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
+//            m_robotManipulator.intakeMotorSpeed(ManipulatorConstants.kIntakeOut);
+            m_robotManipulator.intakeFrontMotorSpeed(ManipulatorConstants.kIntakeFrontOut);
+            m_robotManipulator.intakeRearMotorSpeed(ManipulatorConstants.kIntakeRearOut);
+            
             m_robotManipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
 
-            //m_robotManipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorOff);
-            m_robotManipulator.boxMotorSpeed(ManipulatorConstants.kBoxOff);
+            m_robotManipulator.boxLeftMotorSpeed(ManipulatorConstants.kBoxLeftOff);
+            m_robotManipulator.boxRightMotorSpeed(ManipulatorConstants.kBoxRightOff);
 
             SmartDashboard.putString("command:", "idle");
         }, m_robotManipulator));
@@ -134,6 +137,7 @@ public class RobotContainer {
         speakerRequest.addRequirements(m_robotManipulator);
 
         SequentialCommandGroup ampRequest = new SequentialCommandGroup();
+        ampRequest.addCommands(new FillBox(m_robotManipulator));
         ampRequest.addCommands(new RaiseElevator(m_robotManipulator, ManipulatorConstants.kElevatorAmpPos)); 
         ampRequest.addCommands(new ScoreInAmp(stateTimer, m_robotManipulator));
         ampRequest.addCommands(new BringElevatorDown(m_robotManipulator));
