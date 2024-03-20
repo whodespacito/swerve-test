@@ -1,14 +1,39 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.motorcontrol.Victor;
+import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ManipulatorConstants;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.fasterxml.jackson.databind.deser.std.*;;
 
 public class ManipulatorSubsystem extends SubsystemBase {
 
     private AnalogInput m_inletSensor = new AnalogInput(ManipulatorConstants.kInletColorSensor);
     private AnalogInput m_outletSensor = new AnalogInput(ManipulatorConstants.kOutletColorSensor);
+
+    private final CANSparkMax m_elevator;
+    private final CANSparkMax m_intakeFront;
+    private final CANSparkMax m_intakeRear;
+    private final CANSparkMax m_CNDA;
+//    private final CANSparkMax m_climber;
+
+    private final VictorSPX  m_boxLeft;
+    private final VictorSPX  m_boxRight;
+    private final VictorSPX  m_chute;
+
+    private final SparkPIDController m_CNDAPID;
+    private final SparkPIDController m_elevatorPID;
 
     private static double m_intakeMotorSpeed = 0;
     private static double m_chuteMotorSpeed = 0;
@@ -31,13 +56,50 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private static boolean m_inletLastDetect;
     private static boolean m_outletLastDetect;
 
-    public ManipulatorSubsystem() {}
+    public ManipulatorSubsystem() {
+        m_elevator = new CANSparkMax(ManipulatorConstants.kElevatorCanId, MotorType.kBrushless);
+        m_intakeFront = new CANSparkMax(ManipulatorConstants.kIntakeFrontCanId, MotorType.kBrushless);
+        m_intakeRear = new CANSparkMax(ManipulatorConstants.kIntakeRearCanId, MotorType.kBrushless);
+        m_CNDA = new CANSparkMax(ManipulatorConstants.kCNDACanId, MotorType.kBrushless);
+//        m_climber = new CANSparkMax(ManipulatorConstants.kClimberCanId, MotorType.kBrushless);
+
+        m_boxRight = new VictorSPX(ManipulatorConstants.kBoxRightCanId);
+        m_chute = new VictorSPX(ManipulatorConstants.kChuteCanId);
+        m_boxLeft = new VictorSPX(ManipulatorConstants.kBoxLeftCanId);
+
+        m_elevatorPID = m_elevator.getPIDController();
+        m_elevatorPID.setP(1);
+        m_elevatorPID.setI(0);
+        m_elevatorPID.setD(0);
+        m_elevatorPID.setFF(0);
+        m_elevatorPID.setOutputRange(-1, 1);
+
+        m_CNDAPID = m_CNDA.getPIDController();
+        m_CNDAPID.setP(1);
+        m_CNDAPID.setI(0);
+        m_CNDAPID.setD(0);
+        m_CNDAPID.setFF(0);
+        m_CNDAPID.setOutputRange(-1, 1);
+
+        m_elevator.burnFlash();
+        m_CNDA.burnFlash();
+    }
 
     @Override
     public void periodic() {
 
         //in periodic you will actually tell the motors to drive, the methods relating to the motors only change the speed to drive at
 
+        m_elevatorPID.setReference(m_elevatorSetPos, ControlType.kPosition);
+        m_CNDAPID.setReference(m_CNDASetPos, ControlType.kPosition);
+
+        m_intakeFront.set(m_intakeMotorSpeed);
+        m_intakeRear.set(m_intakeMotorSpeed);
+
+        m_chute.set(ControlMode.Velocity, m_chuteMotorSpeed);
+
+
+        /* 
         //emulated elevator set position
         if (m_elevatorSetPos < m_elevatorCurPos) {
            m_elevatorCurPos = Math.max(m_elevatorCurPos - .1, 0);
@@ -51,7 +113,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         } else if (m_CNDASetPos > m_CNDACurPos) {
            m_CNDACurPos = Math.min(m_CNDACurPos + .1, 10);
         }
-
+        */
         //sets sensors detect and last detect
         m_inletLastDetect = m_inletDetect;
         m_outletLastDetect = m_outletDetect;

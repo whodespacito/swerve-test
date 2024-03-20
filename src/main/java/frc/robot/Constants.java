@@ -156,16 +156,32 @@ public final class Constants {
     public static final double kInletThreshold = 2.5;
     public static final double kOutletThreshold = 2.5;
 
+    //can ids
+    public static final int kElevatorCanId = 9;
+    public static final int kIntakeFrontCanId = 15;
+    public static final int kIntakeRearCanId = 16;
+    public static final int kClimberCanId = 17;
+    public static final int kChuteCanId = 18;
+    public static final int kBoxLeftCanId = 19;
+    public static final int kCNDACanId = 20;
+    public static final int kBoxRightCanId = 21;
+
+
     //motor speeds
-    public static final double kIntakeIn = .5;
+    public static final double kIntakeIn = 0.5;
     public static final double kIntakeOut = -0.5;
     public static final double kIntakeOff = 0;
     
-    public static final double kBoxInFast = 1;
-    public static final double kBoxIn = 0.5;
-    public static final double kBoxOut = -0.5;
-    public static final double kBoxOff = 0;
+    public static final double kBoxRightOutFast = 1;
+    public static final double kBoxRightIn = 0.1;
+    public static final double kBoxRightOut = 0.1;
+    public static final double kBoxRightOff = 0;
     
+    public static final double kBoxLeftOutFast = 0.9;
+    public static final double kBoxLeftIn = 0.1;
+    public static final double kBoxLeftOut = 0.1;
+    public static final double kBoxLeftOff = 0;
+
     public static final double kChuteIn = 0.5;
     public static final double kChuteOut = -0.5;
     public static final double kChuteOff = 0;
