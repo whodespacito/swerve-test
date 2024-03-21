@@ -4,6 +4,13 @@
       "window": {
         "visible": true
       }
+    },
+    "Other Devices": {
+      "SPARK MAX [9]": {
+        "header": {
+          "open": true
+        }
+      }
     }
   },
   "NTProvider": {
@@ -20,6 +27,12 @@
     }
   },
   "NetworkTables Info": {
+    "Server": {
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
     "visible": true
   }
 }

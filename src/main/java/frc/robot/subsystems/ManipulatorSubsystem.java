@@ -7,14 +7,10 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
-import edu.wpi.first.wpilibj.motorcontrol.Victor;
-import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ManipulatorConstants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -32,8 +28,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
 //    private final CANSparkMax m_climber;
 
     private final VictorSPX  m_boxLeft;
-    private final TalonSRX  m_boxRight;
     private final VictorSPX  m_chute;
+    private final TalonSRX  m_boxRight;
 
     private final SparkPIDController m_CNDAPID;
     private final SparkPIDController m_elevatorPID;
@@ -52,7 +48,6 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private static double m_elevatorSetPos = 0;
 
     private static double m_CNDASetPos = ManipulatorConstants.kCNDAStartupPos;
-
 
     private static boolean m_boxFull = false;
     private static boolean m_chuteFull = false;
@@ -78,10 +73,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_CNDAEncoder = m_CNDA.getEncoder();
 
         m_elevatorPID = m_elevator.getPIDController();
-        m_elevatorPID.setP(1);
-        m_elevatorPID.setI(0);
-        m_elevatorPID.setD(0);
-        m_elevatorPID.setFF(0);
+        m_elevatorPID.setP(ManipulatorConstants.kElevatorP);
+        m_elevatorPID.setI(ManipulatorConstants.kElevatorI);
+        m_elevatorPID.setD(ManipulatorConstants.kElevatorD);
+        m_elevatorPID.setFF(ManipulatorConstants.kElevatorFF);
         m_elevatorPID.setOutputRange(-1, 1);
 
         m_CNDAPID = m_CNDA.getPIDController();
@@ -111,23 +106,6 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
         m_chute.set(VictorSPXControlMode.PercentOutput, m_chuteMotorSpeed);
 
-
-        /* 
-        //emulated elevator set position
-        if (m_elevatorSetPos < m_elevatorCurPos) {
-           m_elevatorCurPos = Math.max(m_elevatorCurPos - .1, 0);
-        } else if (m_elevatorSetPos > m_elevatorCurPos) {
-           m_elevatorCurPos = Math.min(m_elevatorCurPos + .1, 100);
-        }
-
-        //emulated CNDA set position
-        if (m_CNDASetPos < m_CNDACurPos) {
-           m_CNDACurPos = Math.max(m_CNDACurPos - .1, 0);
-        } else if (m_CNDASetPos > m_CNDACurPos) {
-           m_CNDACurPos = Math.min(m_CNDACurPos + .1, 10);
-        }
-        */
-
         //sets sensors detect and last detect
         m_inletLastDetect = m_inletDetect;
         m_outletLastDetect = m_outletDetect;
@@ -155,8 +133,6 @@ public class ManipulatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("CNDA set position", m_CNDASetPos);
         SmartDashboard.putNumber("CNDA current position", m_CNDAEncoder.getPosition());
 
-//        SmartDashboard.putNumber("CNDA current position", m_CNDACurPos);
-//         SmartDashboard.putNumber("elevator current position", m_elevatorCurPos);
     }
     
     //regular motors
@@ -186,7 +162,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         m_boxRightMotorSpeed = speed;
     }
 
-    //position motors
+    //  position motors  //
     public void elevatorSetPosition(double position) {
         m_elevatorSetPos = position;
     }

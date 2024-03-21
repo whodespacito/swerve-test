@@ -16,8 +16,7 @@ public class BringElevatorDown extends Command {
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
@@ -26,8 +25,6 @@ public class BringElevatorDown extends Command {
         m_manipulator.intakeRearMotorSpeed(ManipulatorConstants.kIntakeRearOut);
         
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
-
-        //m_manipulator.elevatorMotorSpeed(ManipulatorConstants.kElevatorDown);
 
         m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorDownPos);
 

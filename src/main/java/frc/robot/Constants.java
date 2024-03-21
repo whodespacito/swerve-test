@@ -215,7 +215,7 @@ public final class Constants {
     public static final double kCNDATrapPos = 5;
     public static final double kCNDAStartupPos = kCNDASpeakerPos;
 
-    //PID constants
+    // PID constants //
 
     //Elevator
     public static final double kElevatorP = 1;
@@ -228,7 +228,6 @@ public final class Constants {
     public static final double kCNDAI = 0;
     public static final double kCNDAD = 0;
     public static final double kCNDAFF = 0;
-
 
 
     //times

@@ -13,7 +13,7 @@ public class FillBox extends Command {
     //also known as box full on the paper
     private BooleanSupplier m_outletTrailing = () -> m_manipulator.outletSensorDetect(true) && !m_manipulator.outletSensorDetect(false);
 
-    private int m_observedEdge = 0;
+    private int m_observedEdge;
 
     public FillBox(ManipulatorSubsystem manipulatorSubsystem) {
         m_manipulator = manipulatorSubsystem;
@@ -24,7 +24,7 @@ public class FillBox extends Command {
 
     @Override
     public void initialize() {
-
+        m_observedEdge = 0;
     }
 
     @Override
@@ -48,7 +48,6 @@ public class FillBox extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_observedEdge = 0;
         if (!interrupted) {
             m_manipulator.chuteSetState(false);
             m_manipulator.boxSetState(true);

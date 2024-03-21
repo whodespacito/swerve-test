@@ -20,8 +20,7 @@ public class RaiseElevator extends Command {
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
@@ -31,7 +30,7 @@ public class RaiseElevator extends Command {
 
         m_manipulator.chuteMotorSpeed(ManipulatorConstants.kChuteOff);
 
-        m_manipulator.elevatorSetPosition(ManipulatorConstants.kElevatorUpPos);
+        m_manipulator.elevatorSetPosition(m_desiredHeight);
 
         m_manipulator.boxLeftMotorSpeed(ManipulatorConstants.kBoxLeftOff);
         m_manipulator.boxRightMotorSpeed(ManipulatorConstants.kBoxRightOff);
@@ -41,8 +40,7 @@ public class RaiseElevator extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {
-    }
+    public void end(boolean interrupted) {}
 
     @Override
     public boolean isFinished() {

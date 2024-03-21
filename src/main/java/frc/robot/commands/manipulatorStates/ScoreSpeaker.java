@@ -6,7 +6,6 @@ package frc.robot.commands.manipulatorStates;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ManipulatorConstants;
@@ -14,22 +13,20 @@ import frc.robot.subsystems.ManipulatorSubsystem;
 
 public class ScoreSpeaker extends Command {
     private ManipulatorSubsystem m_manipulator;
-    private Timer m_timer;
 
     private BooleanSupplier m_outletTrailing = () -> m_manipulator.outletSensorDetect(true) && !m_manipulator.outletSensorDetect(false);
 
-    private int m_observedEdge = 0;
+    private int m_observedEdge;
 
-    public ScoreSpeaker(Timer timer, ManipulatorSubsystem manipulatorSubsystem) {
+    public ScoreSpeaker(ManipulatorSubsystem manipulatorSubsystem) {
         m_manipulator = manipulatorSubsystem;
-        m_timer = timer;
         addRequirements(manipulatorSubsystem);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_timer.restart();
+        m_observedEdge = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -48,14 +45,13 @@ public class ScoreSpeaker extends Command {
             m_observedEdge++;
         }
 
-        SmartDashboard.putNumber("box observed edge", m_observedEdge);
+        SmartDashboard.putNumber("scoreSpeaker observed edge", m_observedEdge);
         SmartDashboard.putString("command:", "Score Speaker");
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_observedEdge = 0;
     }
 
     // Returns true when the command should end.

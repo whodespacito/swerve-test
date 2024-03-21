@@ -24,6 +24,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -88,8 +89,6 @@ public class RobotContainer {
 
             SmartDashboard.putString("command:", "idle");
         }, m_robotManipulator));
-
-        SmartDashboard.putData(m_robotManipulator);
     }
 
     /**
@@ -122,7 +121,7 @@ public class RobotContainer {
             , m_robotDrive));
 
 
-        //manipulator tests
+        //manipulator
 
         Timer stateTimer = new Timer();
 
@@ -133,7 +132,7 @@ public class RobotContainer {
 
         SequentialCommandGroup speakerRequest = new SequentialCommandGroup();
         speakerRequest.addCommands(new PrepBoxForSpeaker(stateTimer, m_robotManipulator));
-        speakerRequest.addCommands(new ScoreSpeaker(stateTimer, m_robotManipulator));
+        speakerRequest.addCommands(new ScoreSpeaker(m_robotManipulator));
         speakerRequest.addRequirements(m_robotManipulator);
 
         SequentialCommandGroup ampRequest = new SequentialCommandGroup();
@@ -159,9 +158,20 @@ public class RobotContainer {
 
         //reset boxFull and chuteFull
         new JoystickButton(m_operatorController, OIConstants.kButtonB)
-            .toggleOnTrue(new InstantCommand(() -> {
+            .onTrue(new InstantCommand(() -> {
                 m_robotManipulator.boxSetState(false);
                 m_robotManipulator.chuteSetState(false);
+            }));
+
+        //emergancy stop all commands
+        new JoystickButton(m_operatorController, OIConstants.kButtonStart)
+            .onTrue(new InstantCommand(() -> {
+                CommandScheduler.getInstance().cancelAll();
+            }));
+        
+        new JoystickButton(m_driverController, OIConstants.kButtonStart)
+            .onTrue(new InstantCommand(() -> {
+                CommandScheduler.getInstance().cancelAll();
             }));
 
     }
